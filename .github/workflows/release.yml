@@ -1,0 +1,76 @@
+name: Release
+on:
+  release:
+    types: [published] # 当发布 Release 时触发
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 拉取代码
+        uses: actions/checkout@v4
+
+      - name: 验证版本信息
+        run: |
+          # 获取 release tag 版本号（去掉 v 前缀）
+          VERSION=${GITHUB_REF_NAME#v}
+          echo "Release version: $VERSION"
+
+          # 检查 manifest.json 中的版本是否匹配
+          MANIFEST_VERSION=$(grep -o '"version": "[^"]*"' custom_components/mindor-cloud/manifest.json | cut -d'"' -f4)
+          echo "Manifest version: $MANIFEST_VERSION"
+
+          if [ "$VERSION" != "$MANIFEST_VERSION" ]; then
+            echo "⚠️  Warning: Release version ($VERSION) doesn't match manifest version ($MANIFEST_VERSION)"
+          else
+            echo "✅ Version check passed"
+          fi
+
+      - name: 生成 HACS 兼容的压缩包
+        run: |
+          # 创建临时目录
+          mkdir -p temp_build/mindor_cloud
+
+          # 复制组件文件到临时目录，排除不必要的文件
+          cp -r custom_components/mindor-cloud/* temp_build/mindor_cloud/
+
+          # 删除可能存在的临时文件和缓存
+          find temp_build/ -name "*.pyc" -delete
+          find temp_build/ -name "__pycache__" -type d -exec rm -rf {} + 2>/dev/null || true
+          find temp_build/ -name ".DS_Store" -delete 2>/dev/null || true
+
+          # 生成符合 HACS 规范的压缩包
+          cd temp_build
+          zip -r "../mindor_cloud.zip" mindor_cloud/
+          cd ..
+
+          # 同时生成带版本号的压缩包用于 GitHub Release
+          cp mindor_cloud.zip "hass-mindor-cloud-${{ github.ref_name }}.zip"
+
+          # 显示压缩包内容以供验证
+          echo "📦 压缩包内容："
+          unzip -l mindor_cloud.zip
+
+      - name: 上传到 Release Assets
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            mindor_cloud.zip
+            hass-mindor-cloud-${{ github.ref_name }}.zip
+          body: |
+            ## Mindor Cloud Integration ${{ github.ref_name }}
+
+            ### 安装方法
+
+            #### 通过 HACS 安装
+            1. 下载 `mindor_cloud.zip`
+            2. 在 HACS 中选择 "从本地文件安装"
+            3. 上传下载的 zip 文件
+
+            #### 手动安装
+            1. 下载 `mindor_cloud.zip`
+            2. 解压到 `custom_components/mindor_cloud/` 目录
+            3. 重启 Home Assistant
+
+            ### 更新日志
+            请查看 [提交历史](https://github.com/mindors/hass-mindor-cloud/commits/${{ github.ref_name }}) 了解详细更改。
