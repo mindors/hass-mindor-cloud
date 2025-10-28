@@ -1,0 +1,13 @@
+{
+  "name": "Mindor Cloud",
+  "content_in_root": false,
+  "filename": "mindor_cloud.zip",
+  "country": [
+    "CN"
+  ],
+  "render_readme": true,
+  "domains": [
+    "mindor_cloud"
+  ],
+  "homeassistant": "2023.1.0"
+}
