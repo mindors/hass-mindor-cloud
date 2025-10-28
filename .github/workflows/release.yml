@@ -8,43 +8,25 @@ jobs:
   release-zip:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4 # 拉取代码
 
-      - name: 验证版本信息
+      - name: 生成插件 zip 包
         run: |
+          # 进入插件目录（custom_components/mindor_cloud）
           cd ${{ github.workspace }}/custom_components/mindor_cloud
-          zip -r mindor_cloud.zip ./
+          # 压缩当前目录下的所有文件为 mindor_cloud.zip，输出到项目根目录（方便后续上传）
+          zip -r ${{ github.workspace }}/mindor_cloud.zip ./*
 
-      - name: 生成 HACS 兼容的压缩包
+      - name: 检查 zip 文件是否生成（调试用）
         run: |
-          # 创建临时目录用于打包
-          mkdir -p temp_build/mindor_cloud
+          # 查看根目录下是否有生成的 zip 文件
+          ls -la ${{ github.workspace }}
 
-          # 复制组件文件到临时目录
-          cp -r custom_components/mindor_cloud/* temp_build/mindor_cloud/
-
-          # 删除可能存在的临时文件和缓存
-          find temp_build/ -name "*.pyc" -delete
-          find temp_build/ -name "__pycache__" -type d -exec rm -rf {} + 2>/dev/null || true
-          find temp_build/ -name ".DS_Store" -delete 2>/dev/null || true
-
-          # 生成符合 HACS 规范的压缩包
-          cd temp_build
-          zip -r "../mindor_cloud.zip" mindor_cloud/
-          cd ..
-
-          # 显示压缩包内容以供验证
-          echo "📦 压缩包内容："
-          unzip -l mindor_cloud.zip
-
-          # 检查文件大小
-          ls -lh mindor_cloud.zip
-
-      - name: Upload zip to release
+      - name: 上传 zip 到 Release Assets
         uses: svenstaro/upload-release-action@v2
         with:
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: ${{ github.workspace }}/custom_components/xiaomi_miot/xiaomi_miot.zip
-          asset_name: xiaomi_miot.zip
-          tag: ${{ github.ref }}
-          overwrite: true
+          repo_token: ${{ secrets.GITHUB_TOKEN }} # 自动获取的 GitHub 令牌，无需修改
+          file: ${{ github.workspace }}/mindor_cloud.zip # 指向生成的 zip 文件路径
+          asset_name: mindor_cloud-${{ github.ref_name }}.zip # 资产名称（带版本号，如 mindor_cloud-v1.0.0.zip）
+          tag: ${{ github.ref }} # 关联当前发布的标签
+          overwrite: true # 如果存在同名文件，覆盖它
