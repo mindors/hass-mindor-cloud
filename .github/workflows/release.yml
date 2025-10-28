@@ -4,29 +4,29 @@ on:
   release:
     types: [published]
 
+# 新增：授予工作流必要的权限
+permissions:
+  contents: write # 允许写入仓库内容（包括上传 Release Assets）
+
 jobs:
   release-zip:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4 # 拉取代码
+      - uses: actions/checkout@v4
 
       - name: 生成插件 zip 包
         run: |
-          # 进入插件目录（custom_components/mindor_cloud）
           cd ${{ github.workspace }}/custom_components/mindor_cloud
-          # 压缩当前目录下的所有文件为 mindor_cloud.zip，输出到项目根目录（方便后续上传）
           zip -r ${{ github.workspace }}/mindor_cloud.zip ./*
 
-      - name: 检查 zip 文件是否生成（调试用）
-        run: |
-          # 查看根目录下是否有生成的 zip 文件
-          ls -la ${{ github.workspace }}
+      - name: 检查 zip 文件是否生成
+        run: ls -la ${{ github.workspace }}
 
       - name: 上传 zip 到 Release Assets
-        uses: svenstaro/upload-release-action@v2
+        uses: svenstaro/upload-release-action@v2 # 或升级到最新版本 v2.8.1
         with:
-          repo_token: ${{ secrets.GITHUB_TOKEN }} # 自动获取的 GitHub 令牌，无需修改
-          file: ${{ github.workspace }}/mindor_cloud.zip # 指向生成的 zip 文件路径
-          asset_name: mindor_cloud-${{ github.ref_name }}.zip # 资产名称（带版本号，如 mindor_cloud-v1.0.0.zip）
-          tag: ${{ github.ref }} # 关联当前发布的标签
-          overwrite: true # 如果存在同名文件，覆盖它
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          file: ${{ github.workspace }}/mindor_cloud.zip
+          asset_name: mindor_cloud-${{ github.ref_name }}.zip
+          tag: ${{ github.ref }}
+          overwrite: true
