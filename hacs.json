@@ -9,5 +9,7 @@
   "domains": [
     "mindor_cloud"
   ],
-  "homeassistant": "2023.1.0"
+  "zip_release": true,
+  "hide_default_branch": true,
+  "homeassistant": "2023.9.0"
 }
