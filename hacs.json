@@ -2,14 +2,14 @@
   "name": "Mindor Cloud",
   "content_in_root": false,
   "filename": "mindor_cloud.zip",
-  "country": [
-    "CN"
-  ],
   "render_readme": true,
   "domains": [
     "mindor_cloud"
   ],
   "zip_release": true,
   "hide_default_branch": true,
-  "homeassistant": "2023.9.0"
+  "homeassistant": "2023.9.0",
+  "country": [
+    "CN"
+  ]
 }

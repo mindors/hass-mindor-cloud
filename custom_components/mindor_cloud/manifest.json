@@ -6,17 +6,20 @@
   "documentation": "https://github.com/mindors/hass-mindor-cloud",
   "issue_tracker": "https://github.com/mindors/hass-mindor-cloud/issues",
   "dependencies": [],
+  "after_dependencies": [],
   "codeowners": [
     "@mindors"
   ],
-  "requirements": [
-    "aiohttp"
-  ],
+  "requirements": [],
+  "integration_type": "hub",
   "platforms": [
     "switch",
     "climate",
     "cover",
     "sensor"
   ],
-  "iot_class": "cloud_polling"
+  "iot_class": "cloud_polling",
+  "loggers": [
+    "custom_components.mindor_cloud"
+  ]
 }

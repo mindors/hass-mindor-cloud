@@ -1,25 +1,25 @@
-name: Release
+name: Build Release ZIP
 
 on:
   release:
     types: [published]
 
 jobs:
-  release-zip:
+  build:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
 
-      - name: ZIP Component Dir
+      - name: Create ZIP for HACS
         run: |
-          cd ${{ github.workspace }}/custom_components/mindor_cloud
-          zip -r mindor_cloud.zip ./
+          cd custom_components/mindor_cloud
+          zip -r ../../mindor_cloud.zip ./
 
-      - name: Upload zip to release
+      - name: Upload ZIP to release
         uses: svenstaro/upload-release-action@v2
         with:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: ${{ github.workspace }}/custom_components/mindor_cloud/mindor_cloud.zip
+          file: mindor_cloud.zip
           asset_name: mindor_cloud.zip
           tag: ${{ github.ref }}
           overwrite: true
