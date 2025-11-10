@@ -1,25 +1,26 @@
-name: Build Release ZIP
+name: Auto Release
 
 on:
-  release:
-    types: [published]
+  push:
+    tags:
+      - 'v*'
 
 jobs:
-  build:
+  release:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-      - name: Create ZIP for HACS
+      - name: Set up Git
         run: |
-          cd custom_components/mindor_cloud
-          zip -r ../../mindor_cloud.zip ./
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
 
-      - name: Upload ZIP to release
-        uses: svenstaro/upload-release-action@v2
+      - name: Create GitHub Release
+        uses: ncipollo/release-action@v1
         with:
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
-          file: mindor_cloud.zip
-          asset_name: mindor_cloud.zip
-          tag: ${{ github.ref }}
-          overwrite: true
+          tag: ${{ github.ref_name }}
+          name: Release ${{ github.ref_name }}
+          body: |
+            Automated release triggered by tag `${{ github.ref_name }}`

@@ -2,15 +2,18 @@ name: Hassfest Validation
 
 on:
   push:
+    paths:
+      - 'custom_components/mindor_cloud/**'
+      - '.github/workflows/hassfest.yml'
   pull_request:
   workflow_dispatch:
 
 jobs:
-  validate:
+  hassfest:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Run hassfest
+      - name: Run Hassfest validation
         uses: home-assistant/actions/hassfest@master
