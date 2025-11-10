@@ -8,13 +8,5 @@
   "homeassistant": "2023.9.0",
   "country": [
     "CN"
-  ],
-  "domains": [
-    "switch",
-    "sensor",
-    "climate",
-    "cover"
-  ],
-  "iot_class": "cloud_polling",
-  "quality_scale": "silver"
+  ]
 }
