@@ -1,20 +1,11 @@
 # Mindor Cloud
 
-**Mindor Cloud integration for Home Assistant**
+Home Assistant 自定义集成，支持 Switch、Climate、Cover、Sensor 等设备。
 
-This custom integration allows Home Assistant to connect with Mindor smart devices via the Mindor Cloud service.
+## 安装
 
-## Installation via HACS
+通过 HACS 安装 Mindor Cloud 集成，或手动将 `custom_components/mindor_cloud/` 拷贝到 `config/custom_components/` 下。
 
-1. Open HACS → Integrations → Add custom repository
-2. Add: `https://github.com/mindors/hass-mindor-cloud`
-3. Choose category: **Integration**
-4. Install **Mindor Cloud**
-5. Restart Home Assistant
-6. Add integration in Home Assistant: Settings → Devices & Services → Add Integration → Mindor Cloud
+## 配置
 
-## Links
-
-- [Repository](https://github.com/mindors/hass-mindor-cloud)
-- [Releases](https://github.com/mindors/hass-mindor-cloud/releases)
-- [Issues](https://github.com/mindors/hass-mindor-cloud/issues)
+请在 HA 界面通过配置流程添加账号或设备。
