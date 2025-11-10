@@ -12,12 +12,6 @@
   ],
   "requirements": [],
   "integration_type": "hub",
-  "platforms": [
-    "switch",
-    "climate",
-    "cover",
-    "sensor"
-  ],
   "iot_class": "cloud_polling",
   "loggers": [
     "custom_components.mindor_cloud"
