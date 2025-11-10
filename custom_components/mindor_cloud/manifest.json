@@ -1,7 +1,7 @@
 {
   "domain": "mindor_cloud",
   "name": "Mindor Cloud",
-  "version": "1.0.3",
+  "version": "1.0.1",
   "config_flow": true,
   "documentation": "https://github.com/mindors/hass-mindor-cloud",
   "issue_tracker": "https://github.com/mindors/hass-mindor-cloud/issues",
